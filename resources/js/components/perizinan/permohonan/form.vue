@@ -131,28 +131,48 @@
                   </div>
 
                   <el-divider content-position="right">KELENGKAPAN BERKAS PERSYARATAN</el-divider>
+                  <el-row :gutter="5">
+                    <el-col :md="12">
+                      <el-input
+                          v-model="table.search"
+                          placeholder="Type to search"/>
+                    </el-col>
+                    <el-col :md="12">
+                      <el-switch
+                              style="display: block"
+                              v-model="kelengkapanAll"
+                              @change="berkasLengkapAll"
+                              active-color="#13ce66"
+                              inactive-color="#ff4949"
+                              active-text="Berkas lengkap">
+                            </el-switch>
+                    </el-col>
+                  </el-row>
+                  <br/>
                   <el-table
                     ref="table_persyaratan"
                     v-loading="table.isLoading"
-                    :data="table.data.filter(data => !table.search || data.persyaratan.toLowerCase().includes(table.search.toLowerCase()))"
+                    :data="form.persyaratan.filter(persyaratan => !table.search || persyaratan.persyaratan.toLowerCase().includes(table.search.toLowerCase()))"
                     border
                     style="width: 100%">
                     <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column label="Persyaratan"prop="persyaratan"></el-table-column>
-                    <el-table-column
-                        align="right">
-                        <template slot="header" slot-scope="scope">
-                            <el-input
-                            v-model="table.search"
-                            size="mini"
-                            placeholder="Type to search"/>
+                    <el-table-column label="Persyaratan" prop="persyaratan"></el-table-column>
+                    <el-table-column label="kelengkapan Berkas" align="center">
+                        <template slot-scope="scope">
+                            <el-switch
+                              style="display: block"
+                              v-model="scope.row.kelengkapan"
+                              active-color="#13ce66"
+                              inactive-color="#ff4949"
+                              active-text="Berkas lengkap">
+                            </el-switch>
                         </template>
-                    <template slot-scope="scope">
-                        
-                    </template>
                     </el-table-column>
                 </el-table>
               </el-form>
+            </div>
+            <div class="card-footer">
+              <el-button type="primary">Proses</el-button>
             </div>
           </div>
             
@@ -208,7 +228,8 @@ export default {
           search : null
         },
         izin : {},
-        opd : {}
+        opd : {},
+        kelengkapanAll : false
       }
   },
   mounted() {
@@ -219,6 +240,16 @@ export default {
     this.GetIzin()
   },
   methods:{
+    kelengkapanPersyaratan(){
+      this.form.persyaratan.forEach((item,index) => {
+            this.$set(item, 'kelengkapan', "false")
+      })
+    },
+    berkasLengkapAll(){
+      this.form.persyaratan.forEach((item,index) => {
+            item.kelengkapan = this.kelengkapanAll
+      })
+    },
     GetIzin(){
             axios
                 .post(urlBase.urlWeb+'/opd/izin',{
@@ -227,12 +258,11 @@ export default {
                 })
                 .then(r => (
                     this.izin = r.data[0],
-                    this.table.data = r.data[0].persyaratan,
                     this.opd = r.data[0].opd,
 
                     this.form.izin = r.data[0],
                     this.form.persyaratan = r.data[0].persyaratan,
-
+                    this.kelengkapanPersyaratan(),
                     this.table.isLoading = false
                 ));
         }

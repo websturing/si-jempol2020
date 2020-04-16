@@ -96,20 +96,6 @@ export default {
             return (a.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
             };
         },
-        loadAll() {
-            return [
-                { "value": "vue", "link": "https://github.com/vuejs/vue" },
-                { "value": "element", "link": "https://github.com/ElemeFE/element" },
-                { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-                { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-                { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-                { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-                { "value": "babel", "link": "https://github.com/babel/babel" }
-                ];
-            },
-            handleSelect(item) {
-                console.log(item);
-        },
         GetNamaizin(){
             axios
                 .post(urlBase.urlWeb+'/opd/izin',{
@@ -119,6 +105,9 @@ export default {
                     // console.log(r.data),
                     this.links = r.data
                 ));
+        },
+        handleSelect(item){
+            this.$router.push({ name: 'perizinan-permohonan-form', params: { id: item.Crypt } })
         }
     },
     components:{

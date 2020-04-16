@@ -3,6 +3,7 @@
 namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class mdopdIzin extends Model
 {
@@ -10,7 +11,8 @@ class mdopdIzin extends Model
     protected $primaryKey   = "opdi_id";
 
     protected $appends = [
-        'value'
+        'value',
+        'Crypt'
     ];
 
     function getvalueAttribute() {
@@ -23,5 +25,9 @@ class mdopdIzin extends Model
 
     function opd(){
         return $this->belongsTo(mdOpd::class, "opd_id");
+    }
+
+    function getCryptAttribute(){
+        return Crypt::encryptString($this->opdi_id);
     }
 }

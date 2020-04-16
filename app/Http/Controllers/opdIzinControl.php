@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\model\mdopdIzin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class opdIzinControl extends Controller
 {
@@ -24,7 +25,7 @@ class opdIzinControl extends Controller
     }
 
     function izinById(Request $r){
-        $id = $r->get("id");
+        $id = Crypt::decryptString($r->get("id"));
 
         $izin = mdopdIzin::with('persyaratan','opd')
                     ->where("opdi_id", $id)

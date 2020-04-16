@@ -37,7 +37,7 @@
                                         <el-input
                                         v-model="table.search"
                                         size="mini"
-                                        placeholder="Type to search"/>
+                                        placeholder="Cari Data Persyaratan"/>
                                     </template>
                                 <template slot-scope="scope">
                                      <a  class="btn btn-xs btn-primary" v-if="scope.row.statusUpload.download"
