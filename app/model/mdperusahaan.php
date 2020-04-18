@@ -15,7 +15,7 @@ class mdperusahaan extends Model
     ];
 
     function getfullnameAttribute() {
-        return $this->status.'. '. $this->nama;
+        return $this->kategori.'. '. $this->nama;
     }
 
     function permohonan(){
