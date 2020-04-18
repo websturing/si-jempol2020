@@ -35,6 +35,8 @@ class appControl extends Controller
                     ); 
                 }
                 else{
+         
+
                     Session::put("aclGroupId", $ur[0]->aclGroup_id);
                     Session::put("username", $ur[0]->username);
                     Session::put("opd_id", $ur[0]->opd_id);

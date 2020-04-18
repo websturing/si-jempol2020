@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-xs btn-primary" @click="edit('2102040912810010'), modal_open('show')">Ubah</button>
+                    <button type="button" class="btn btn-xs btn-primary" @click="edit(npwp), modal_open('show')">Ubah</button>
                 </div>
             </div>
         </div>
@@ -76,9 +76,9 @@
                                         <div class="form-group col-md-4">
                                             <label>Kategori</label>
                                             <el-form-item
-                                                prop="status"
+                                                prop="kategori"
                                                 :rules="{ required: true, message: 'field tidak boleh kosong', trigger: 'blur' }">
-                                                <el-select v-model="form.status" clearable placeholder="Kategori Perusahaan" @change="typeSelect()">
+                                                <el-select v-model="form.kategori" clearable placeholder="Kategori Perusahaan">
                                                     <el-option
                                                         v-for="item in select.status"
                                                         :key="item.value"
@@ -190,7 +190,7 @@ export default {
       form :{
           perusahaan_id : null,
           npwp : null,
-          status : null,
+          kategori : null,
           nama : null,
           alamat : null,
           email : null,
@@ -217,9 +217,15 @@ export default {
         console.log("perusahaan Data")
         this.$parent.$data.activeLink = 'perizinan';
         this.$parent.$data.activeName = 'Permohonan Data';
-        this.GetData(this.npwp)
+       
   },
-  props:['npwp','rincian'],
+  created(){
+       this.GetData(this.npwp)
+  },
+  props:{
+      npwp : String,
+      rincian : Boolean,
+  },
   methods:{
       notif(s,m,type){
             this.$notify({

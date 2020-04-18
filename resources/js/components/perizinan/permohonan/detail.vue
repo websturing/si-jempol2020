@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <perusahaan v-bind:npwp="'024121899215000'" v-bind:rincian="false"></perusahaan>
+                <perusahaan v-bind:npwp="perusahaan.npwp" v-bind:rincian="false" v-if="show.perusahaan"></perusahaan>
             </div>
             <div class="col-md-12">
                 <el-tabs type="border-card">
@@ -31,6 +31,7 @@
                             style="width: 100%">
                             <el-table-column type="index" width="50"></el-table-column>
                             <el-table-column prop="persyaratan" label="Persyaratan" header-align="center"></el-table-column>
+                            <el-table-column prop="catatan" label="Catatan" header-align="center" align="right"></el-table-column>
                             <el-table-column
                                     align="right">
                                     <template slot="header" slot-scope="scope">
@@ -108,7 +109,8 @@ export default {
           file : urlBase.urlWeb
       },
       show : {
-          modal : true
+          modal : true,
+          perusahaan : false
       },
       today : moment().format('DD-MM-YYYY'),
       table:{
@@ -118,6 +120,9 @@ export default {
       },
       permohonan : [],
       izin : {},
+      perusahaan :{
+          npwp : null
+      },
       opd : {},
       queue:[],
       progress :[]
@@ -125,11 +130,12 @@ export default {
   },
   props:['rekomendasi'],
   mounted() {
-        console.log("permohonan Data")
-        this.$parent.$data.activeLink = 'perizinan';
-        this.$parent.$data.activeName = 'Permohonan Data';
-        this.GetData(this.id)
-       
+    console.log("permohonan Data")
+    this.$parent.$data.activeLink = 'perizinan';
+    this.$parent.$data.activeName = 'Permohonan Data'; 
+  },
+  created(){
+      this.GetData(this.id)
   },
   components:{
       perusahaan,
@@ -165,10 +171,12 @@ export default {
                 })
                 .then(r => (
                     this.table.data = r.data[0].persyaratan,
+                    this.perusahaan = r.data[0].perusahaan,
                     this.permohonan = r.data[0],
                     this.izin = r.data[0].izin,
                     this.opd = r.data[0].opd,
-                    this.table.isLoading = false
+                    this.table.isLoading = false,
+                    this.show.perusahaan = true
                 ));
         },
         edit(index,row){

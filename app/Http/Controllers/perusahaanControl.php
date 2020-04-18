@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\model\mdperusahaan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class perusahaanControl extends Controller
 {
@@ -36,7 +37,7 @@ class perusahaanControl extends Controller
         $data = $r->get('data');
         $toDB = array(
             "npwp"      => $data['npwp'],
-            "status"    => $data['status'],
+            "kategori"    => $data['kategori'],
             "nama"      => $data['nama'],
             "alamat"    => $data['alamat'],
             "email"     => $data['email'],
@@ -51,5 +52,23 @@ class perusahaanControl extends Controller
             "message"   => "Data Berhasil Di Rubah",
             "code"      => "200"
         );
+    }
+
+    public static function Insertperusahaan(Request $r){
+        $data = $r->get('perusahaan');
+        $toDB = array(
+            "npwp"  => $data["npwp"],
+            "kategori"  => $data["kategori"],
+            "nama"  => $data["nama"],
+            "alamat"  => $data["alamat"],
+            "email"  => $data["email"],
+            "contact"  => $data["contact"],
+            "create_on"  => "walkin",
+        );
+
+        mdperusahaan::insert($toDB);
+        $id = DB::getPdo()->lastInsertId();
+
+        return $id;
     }
 }

@@ -124,7 +124,7 @@
                             prop="pemohon.email"
                             :rules="{message: 'field tidak boleh kosong', trigger: 'blur' }">
                             <el-input placeholder="Email Pemohon"
-                                      v-model="form.pemohon.contact"
+                                      v-model="form.pemohon.email"
                                       clearable></el-input>
                         </el-form-item>
                       </div>
@@ -168,11 +168,16 @@
                             </el-switch>
                         </template>
                     </el-table-column>
+                    <el-table-column label="Catatan" align="center">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.catatan"></el-input>
+                        </template>
+                    </el-table-column>
                 </el-table>
               </el-form>
             </div>
             <div class="card-footer">
-              <el-button type="primary">Proses</el-button>
+              <el-button type="primary" @click="InsertProses()" >Proses</el-button>
             </div>
           </div>
             
@@ -211,6 +216,7 @@ export default {
             contact : null,
             identitas_no : null,
             identitas_kategori : "KTP",
+            perusahaan_id : null,
           },
           izin :{},
           persyaratan : []
@@ -240,9 +246,17 @@ export default {
     this.GetIzin()
   },
   methods:{
+    notif(s,m,type){
+            this.$notify({
+                title: s,
+                message: m,
+                type: type
+            });
+    },
     kelengkapanPersyaratan(){
       this.form.persyaratan.forEach((item,index) => {
             this.$set(item, 'kelengkapan', "false")
+            this.$set(item, 'catatan', null)
       })
     },
     berkasLengkapAll(){
@@ -251,21 +265,32 @@ export default {
       })
     },
     GetIzin(){
-            axios
-                .post(urlBase.urlWeb+'/opd/izin',{
-                    type : "izinById",
-                    id : this.id
-                })
-                .then(r => (
-                    this.izin = r.data[0],
-                    this.opd = r.data[0].opd,
+        axios
+            .post(urlBase.urlWeb+'/opd/izin',{
+                type : "izinById",
+                id : this.id
+            })
+            .then(r => (
+                this.izin = r.data[0],
+                this.opd = r.data[0].opd,
 
-                    this.form.izin = r.data[0],
-                    this.form.persyaratan = r.data[0].persyaratan,
-                    this.kelengkapanPersyaratan(),
-                    this.table.isLoading = false
-                ));
-        }
+                this.form.izin = r.data[0],
+                this.form.persyaratan = r.data[0].persyaratan,
+                this.kelengkapanPersyaratan(),
+                this.table.isLoading = false
+            ));
+     },
+     InsertProses(){
+        axios
+            .post(urlBase.urlWeb+'/perizinan/permohonan',{
+                type : "insert",
+                form : this.form
+            })
+            .then(r => (
+              this.notif(r.data.title, r.data.message, r.data.type),
+              this.$router.push({ name: 'perizinan-permohonanDetail', params: { id: r.data.dataId } })
+            ));
+     }
   }
   
 }

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\mdPermohonan;
 use App\model\mdPermohonanPersyaratan;
+use App\Http\Controllers\perusahaanControl;
+use App\Http\Controllers\perusahaanPemohonControl;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class permohonanControl extends Controller
 {
@@ -18,6 +21,9 @@ class permohonanControl extends Controller
         }
         else if($type == 'dataById'){
             return self::dataById($r);
+        }
+        else if($type == 'insert'){
+            return self::insertPermohonan($r);
         }
         else if($type == 'uploadSingle'){
             return self::uploadSingle($r);
@@ -112,5 +118,59 @@ class permohonanControl extends Controller
         
         return $filename;
         
+    }
+
+    /*----------------------=== CRUD ===-----------------------*/
+
+    function insertPermohonan(Request $r){
+        $data = $r->get("form");
+        $perusahaan = new Request();
+        $perusahaan->replace(['perusahaan' => $data['perusahaan']]);
+
+        $perusahaan_id = perusahaanControl::Insertperusahaan($perusahaan);
+        $data['pemohon']['perusahaan_id'] =  $perusahaan_id;
+        $perusahaan_pemohon = new Request();
+        $perusahaan_pemohon->replace(['pemohon' => $data['pemohon']]);
+        $perusahaan_pemohon_id = perusahaanPemohonControl::perusahaanpemohonInsert($perusahaan_pemohon);
+
+        $code ='PRMN';
+        $pegawaiCode = DB::table('permohonan')->where('permohonan_code', 'like', '%' . $code . '%')->max('permohonan_code');
+        $idmax1 = $pegawaiCode;
+        $nourut1 = (int) substr($idmax1, 4,5);
+        $nourut1++;
+        $permohonan_code = $code . sprintf("%05s", $nourut1);
+        
+        $toDBpermohonan = array(
+            "permohonan_code"   => $permohonan_code,
+            "perusahaan_id"     => $perusahaan_id,  
+            "perusahaanp_id"    => $perusahaan_pemohon_id,
+            "opd_id"            => $data["izin"]["opd_id"],
+            "opdi_id"           => $data["izin"]["opdi_id"],    
+            "status"            => "proses", 
+            "create_on"         => "walkin"
+        );
+        mdPermohonan::insert($toDBpermohonan);
+        $permohonanId = DB::getPdo()->lastInsertId();
+
+        foreach($data["persyaratan"] as $index => $p){
+            $toDbPersyaratan = array(
+                "permohonan_id" => $permohonanId,
+                "persyaratan" => $p["persyaratan"],
+                "status" => "waiting-upload",
+                "catatan" => $p["catatan"]
+            );
+            mdPermohonanPersyaratan::insert($toDbPersyaratan);
+        }
+
+                
+
+
+        return array(
+            "title"     => "Info",
+            "type"      => "success",
+            "message"   => "Data Berhasil Di Simpan",
+            "code"      => "200",
+            "dataId"        => $permohonanId
+        );
     }
 }
