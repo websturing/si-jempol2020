@@ -6,6 +6,7 @@ use App\model\mdOpd;
 use App\model\mdopdIzin;
 use App\model\mdPermohonanPersyaratan;
 use App\model\mdperusahaan;
+use App\model\mdperusahaanPemohon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -37,6 +38,9 @@ class mdPermohonan extends Model
     }
     function perusahaan(){
         return $this->belongsTo(mdperusahaan::class,'perusahaan_id');
+    }
+    function pemohon(){
+        return $this->belongsTo(mdperusahaanPemohon::class,'perusahaanp_id');
     }
 
 }

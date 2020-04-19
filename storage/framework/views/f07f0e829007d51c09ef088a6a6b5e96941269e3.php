@@ -55,6 +55,9 @@
             padding : 5px;
             border: 1px solid #333;
         }
+        .Valign{
+            vertical-align: top !important;
+        }
     </style>
     <body>
         <div class="header">
@@ -63,52 +66,48 @@
         <div style="padding:20px">
             <center class="judul">ROUTING SLIP DOKUMEN PERIZINAN/NON PERIZINAN <br/> DPMPTSP PROVINSI KEPULAUAN RIAU</center>
             <br/><br/>
-            <div style="width:50%; float:left">
+            <div style="width:60%; float:left">
             <table>
                 <tr>
-                    <td valign="top">Tanggal Daftar</td>
-                    <td valign="top">&nbsp;&nbsp; : &nbsp;&nbsp;</td>
-                    <td valign="top">
-                        asdkjashdlasdhla<br/>
-                    </td>
+                    <td class="Valign">Tanggal Daftar</td>
+                    <td class="Valign">&nbsp;&nbsp; : &nbsp;&nbsp;</td>
+                    <td class="Valign"><?php echo e($p->created_at); ?></td>
                 </tr>
                 <tr>
-                    <td valign="top">Izin</td>
-                    <td valign="top">&nbsp;&nbsp; : &nbsp;&nbsp;</td>
-                    <td valign="top">
-                        asdkjashdlasdhla<br/>
-                        asdkjashdlasdhla<br/>
-                        asdkjashdlasdhla<br/>
-
+                    <td class="Valign">Izin</td>
+                    <td class="Valign">&nbsp;&nbsp; : &nbsp;&nbsp;</td>
+                    <td class="Valign">
+                        <?php echo e($p->izin->nama_izin); ?><br/>
+                        <?php echo e($p->izin->kategori); ?><br/>
+                        <?php echo e($p->opd->opd); ?><br/>
                     </td>
                 </tr>
                 <tr>
                     <td>Nama Perusahaan</td>
                     <td>&nbsp; : &nbsp;</td>
-                    <td></td>
+                    <td><?php echo e($p->perusahaan->fullname); ?></td>
                 </tr>
                 <tr>
                    <td>Nama Pemohon</td>
                    <td>&nbsp; : &nbsp;</td>
-                   <td></td>
+                   <td><?php echo e($p->pemohon->nama); ?></td>
                </tr>
                <tr>
                     <td>Email / Hp</td>
                     <td>&nbsp; : &nbsp;</td>
-                    <td></td>
+                    <td><?php echo e($p->pemohon->email); ?> / <?php echo e($p->pemohon->contact); ?></td>
                 </tr>
             </table>
             </div>
-            <div style="width:50%; float:right">
+            <div style="width:40%; float:right">
                 <div class="text-right">
-                    <img src="data:image/png;base64, <?php echo e(base64_encode(QrCode::format('png')->size(100)->generate('afriandi'))); ?>" width=80px>
                     <img src="<?php echo e(url('public/images/kswp.jpg')); ?>" width="200px">
                     <br/>
                     <table class="text-right">
                         <tr>
                             <td>Nomor Bukti Penerimaan</td>
                             <td>&nbsp; : &nbsp;</td>
-                            <td></td>
+                            <td><?php echo e($p->permohonan_code); ?></td>
                         </tr>
                         <tr>
                            <td>Front Office</td>
@@ -116,6 +115,7 @@
                            <td></td>
                        </tr>
                     </table>
+                    <img src="data:image/png;base64, <?php echo e(base64_encode(QrCode::format('png')->size(100)->generate($p->permohonan_code))); ?>" width=80px>
                 </div>
             </div>
             <div style="clear:both"></div>
