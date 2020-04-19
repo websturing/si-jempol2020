@@ -15,6 +15,7 @@ Route::get("/login", "appControl@index")->where("any", ".*");
 Route::POST("/login/submitform", "appControl@loginSubmit");
 Route::get("/logout", "appControl@logout");
 
+Route::get("/PDF", "pdfControl@index");
 
 Route::group(['middleware' => ['loginAuth']], function () {     
 
