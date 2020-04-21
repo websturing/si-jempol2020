@@ -12,7 +12,7 @@
             <div class="col-md-2">
                 <div class="row">
                     <div class="pull-right">
-                        <button type="button" class="btn btn-success">Routing Slip</button>
+                        <a :href="url.pdf+'?type=routingSlip&id='+scope.row.permohonan_id" class="btn btn-sm btn-success" target="_blank">Routing Slip</a>
                         <button type="button" class="btn btn-primary">Download</button>
                     </div>
                 </div>
@@ -104,6 +104,9 @@ import rekomendasi from '@/js/components/perizinan/permohonan/rekomendasi';
 export default {
   data () {
     return {
+       url :{
+        pdf : urlBase.urlWeb+'/PDF',
+      },
       id : this.$route.params.id,
       url:{
           file : urlBase.urlWeb
