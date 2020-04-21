@@ -65,7 +65,7 @@
                             placeholder="Type to search"/>
                         </template>
                     <template slot-scope="scope">
-                        <el-button size="mini" type="success" @click="edit(scope.$index, scope.row)">Routing Slip</el-button>
+                        <a :href="url.pdf+'?type=routingSlip&id='+scope.row.permohonan_id" class="btn btn-sm btn-success" target="_blank">Routing Slip</a>
                         <el-button size="mini" @click="edit(scope.$index, scope.row)">Detail</el-button>
                     </template>
                     </el-table-column>
@@ -86,6 +86,9 @@ import moment from 'moment';
 export default {
   data () {
     return {
+      url :{
+        pdf : urlBase.urlWeb+'/PDF',
+      },
       today : moment().format('DD-MM-YYYY'),
       range : null,
       table:{
