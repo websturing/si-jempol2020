@@ -11,6 +11,8 @@ class persyaratanControl extends Controller
     {
         $izin = mdopdIzin::with(['persyaratan', 'opd'])->get();
 
-        return $izin;
+        return response()
+            ->json($izin)
+            ->withCallback($r->input('callback'));
     }
 }
