@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\model\mdopdIzin;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 
 class persyaratanControl extends Controller
 {
@@ -11,8 +13,6 @@ class persyaratanControl extends Controller
     {
         $izin = mdopdIzin::with(['persyaratan', 'opd'])->get();
 
-        return response()
-            ->json($izin)
-            ->withCallback($r->input('callback'));
+        return FacadesResponse::json($izin, 200, array('Content-Type' => 'application/javascript'));
     }
 }
