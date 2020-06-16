@@ -12,22 +12,31 @@ class mdopdIzin extends Model
 
     protected $appends = [
         'value',
-        'Crypt'
+        'Crypt',
+        'linkPDF'
     ];
 
-    function getvalueAttribute() {
+    function getvalueAttribute()
+    {
         return $this->nama_izin;
     }
-
-    function persyaratan(){
+    function getlinkPDFAttribute()
+    {
+        $crypt = Crypt::encryptString($this->opdi_id);
+        return url("persyaratan/pdf?id=" . $crypt);
+    }
+    function persyaratan()
+    {
         return $this->hasMany(mdopdPersyartaan::class, "opdi_id");
     }
 
-    function opd(){
+    function opd()
+    {
         return $this->belongsTo(mdOpd::class, "opd_id");
     }
 
-    function getCryptAttribute(){
+    function getCryptAttribute()
+    {
         return Crypt::encryptString($this->opdi_id);
     }
 }

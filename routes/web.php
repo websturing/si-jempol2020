@@ -16,6 +16,7 @@ Route::POST("/login/submitform", "appControl@loginSubmit");
 Route::get("/logout", "appControl@logout");
 
 Route::get("/PDF", "pdfControl@index");
+Route::get("/persyaratan/pdf", "pdfControl@PersyaratanPDF");
 
 Route::group(['middleware' => ['loginAuth']], function () {
 
