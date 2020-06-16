@@ -17,18 +17,20 @@
         <br/>
         <el-row :gutter="5">
             <el-col :span="8">
-                <el-card class="box-card" shadow="never">
-                    <el-row :gutter="20">
-                        <el-col :span="5">
-                            <img :src="url.assets+'/icon/checklist.png'" class="img-fluid">
-                        </el-col>
-                        <el-col :span="18">
-                            <h1>DATA PERMOHONAN</h1>
-                        </el-col>
-                    </el-row>
-                    <el-divider content-position="right">aktifitas terakhir</el-divider>
-                    afriandi
-                </el-card>
+                <a :href="url.link+'/perizinan-permohonanData'">
+                    <el-card class="box-card" shadow="never">
+                        <el-row :gutter="20">
+                            <el-col :span="5">
+                                <img :src="url.assets+'/icon/checklist.png'" class="img-fluid">
+                            </el-col>
+                            <el-col :span="18">
+                                <h1>DATA PERMOHONAN</h1>
+                            </el-col>
+                        </el-row>
+                        <el-divider content-position="right">aktifitas terakhir</el-divider>
+                        afriandi
+                    </el-card>
+                </a>
             </el-col>
             <el-col :span="8">
                 <el-card class="box-card" shadow="never">
@@ -71,6 +73,7 @@ export default {
         return{
             url:{
                 assets : urlBase.urlWeb+'/public',
+                link : urlBase.urlWeb,
             },
             state2 : '',
             links : '',
